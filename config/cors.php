@@ -1,18 +1,20 @@
 <?php
 
 return [
-    'paths' => ['api/*'],
+    'paths' => ['*'],
 
-    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://127.0.0.1:9000',
-        'http://localhost:9000'
+        'https://efd6baf6e645.ngrok-free.app',
     ],
 
-    'allowed_origins_patterns' => [],
-
-    'allowed_headers' => ['Content-Type', 'X-Requested-With', 'Accept'],
+    'allowed_headers' => [
+        'Content-Type',
+        'Accept',
+        'Authorization',
+        'X-Requested-With',
+    ],
 
     'exposed_headers' => [],
 

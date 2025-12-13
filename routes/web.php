@@ -13,17 +13,22 @@ use App\Http\Controllers\API\SurveyAPI;
 
 Route::get('/', fn() => view('AIO'));
 
+// Public API routes (no authentication required)
 Route::post('/api/login', [AuthAPI::class, 'RequestLogin']);
 Route::post('/api/register', [AuthAPI::class, 'RequestRegister']);
-Route::post('/api/logout', [AuthAPI::class, 'RequestLogout']);
 
-Route::get('/api/profile', [ProfileAPI::class, 'GetProfile']);
+// Protected API routes (require token authentication)
+Route::middleware(['api.token'])->group(function () {
+    Route::post('/api/logout', [AuthAPI::class, 'RequestLogout']);
 
-Route::get('/api/school', [SchoolAPI::class, 'GetListSchool']);
-Route::post('/api/school', [SchoolAPI::class, 'InsertSchool']);
-Route::get('/api/school/{id}', [SchoolAPI::class, 'GetDetailSchool']);
-Route::put('/api/school/{id}', [SchoolAPI::class, 'UpdateSchool']);
-Route::delete('/api/school/{id}', [SchoolAPI::class, 'DeleteSchool']);
+    Route::get('/api/profile', [ProfileAPI::class, 'GetProfile']);
 
-Route::post('/api/survey/food', [SurveyAPI::class, 'SurveyFood']);
-Route::post('/api/survey/allergy', [SurveyAPI::class, 'SurveyAllergy']);
+    Route::get('/api/school', [SchoolAPI::class, 'GetListSchool']);
+    Route::post('/api/school', [SchoolAPI::class, 'InsertSchool']);
+    Route::get('/api/school/{id}', [SchoolAPI::class, 'GetDetailSchool']);
+    Route::put('/api/school/{id}', [SchoolAPI::class, 'UpdateSchool']);
+    Route::delete('/api/school/{id}', [SchoolAPI::class, 'DeleteSchool']);
+
+    Route::post('/api/survey/food', [SurveyAPI::class, 'SurveyFood']);
+    Route::post('/api/survey/allergy', [SurveyAPI::class, 'SurveyAllergy']);
+});

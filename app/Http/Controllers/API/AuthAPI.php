@@ -8,35 +8,59 @@ use App\Models\Account;
 
 class AuthAPI extends Controller
 {
-    public function RequestLogin(Request $request) {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+    public function RequestLogin(Request $request)
+    {
+        try {
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required',
+            ]);
 
-        $user = Account::where('username', $request->username)->first();
+            $user = Account::where('username', $request->username)->first();
 
-        if ($user) {
-            $request->session()->put('user_id', $user->id);
-            $request->session()->put('username', $user->username);
+            if (!$user) {
+                return response()->json(['status' => 'error', 'message' => 'Username not found'], 401);
+            }
+
+            if (!password_verify($request->password, $user->password)) {
+                return response()->json(['status' => 'error', 'message' => 'Wrong password'], 401);
+            }
+
+            $token = bin2hex(random_bytes(32));
+            $user->api_token = $token;
+            $user->save();
+
+            $cookie = cookie(
+                'api_token',
+                $token,
+                60 * 24,
+                '/',
+                null,
+                true,
+                true,
+                false,
+                'None'
+            );
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Login successfully',
                 'data' => [
                     'user_id' => $user->id,
-                    'username' => $user->username
+                    'username' => $user->username,
+                    'api_token' => $token // tambahkan ini sementara untuk testing
                 ]
-            ]);
+            ])->cookie($cookie);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Exception: ' . $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Wrong username or password'
-        ], 401);
     }
 
-    public function RequestRegister(Request $request) {
+    public function RequestRegister(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:account,username|max:255',
             'password' => 'required|min:4',
@@ -70,12 +94,53 @@ class AuthAPI extends Controller
         ], 200);
     }
 
-    public function RequestLogout(Request $request) {
-        $request->session()->flush();
+    public function RequestLogout(Request $request)
+    {
+        try {
+            $token = $request->cookie('api_token');
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Logged out successfully'
-        ]);
+            if ($token) {
+                $user = Account::where('api_token', $token)->first();
+                if ($user) {
+                    $user->api_token = null;
+                    $user->save();
+                }
+            }
+
+            $cookie = cookie(
+                'api_token',
+                null,
+                -1,
+                '/',
+                null,      // domain current host
+                true,      // secure (ubah true jika HTTPS di production)
+                true,      // httpOnly
+                false,
+                'None'
+            );
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Logged out successfully'
+            ])->cookie($cookie);
+
+        } catch (\Throwable $e) {
+            $cookie = cookie(
+                'api_token',
+                null,
+                -1,
+                '/',
+                null,
+                true,
+                true,
+                false,
+                'None'
+            );
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Logout failed: ' . $e->getMessage()
+            ], 500)->cookie($cookie);
+        }
     }
 }

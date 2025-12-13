@@ -7,14 +7,12 @@
 </head>
 <body>
     <form action="/api/login" method="post">
-        @csrf
         <input type="text" name="username" value="USERNAME123">
         <input type="text" name="password" value="PASSWORD123">
         <button type="submit">/api/login POST</button>
     </form>
     <hr>
     <form action="/api/register" method="post">
-        @csrf
         <input type="text" name="username" value="USERNAME123">
         <input type="text" name="password" value="PASSWORD123">
         <input type="text" name="office" value="OFFICE123">
@@ -23,22 +21,18 @@
     </form>
     <hr>
     <form action="/api/logout" method="post">
-        @csrf
         <button type="submit">/api/logout POST</button>
     </form>
     <hr>
     <form action="/api/profile" method="get">
-        @csrf
         <button type="submit">/api/profile GET</button>
     </form>
     <hr>
     <form action="/api/school" method="get">
-        @csrf
         <button type="submit">/api/school GET</button>
     </form>
     <hr>
     <form action="/api/school" method="post" enctype="multipart/form-data">
-        @csrf
         <input type="text" name="name" value="NAME123">
         <input type="text" name="location" value="LOCATION123">
         <input type="number" name="total_student" value="1">
@@ -49,13 +43,11 @@
     </form>
     <hr>
     <form action="" method="get" onsubmit="this.action='/api/school/' + this.id.value">
-        @csrf
         <input type="number" name="id" value="1">
         <button type="submit">/api/school/{id} GET</button>
     </form>
     <hr>
     <form action="" method="post" onsubmit="this.action='/api/school/' + this.id.value" enctype="multipart/form-data">
-        @csrf
         @method('PUT')
         <input type="number" name="id" value="1">
         <input type="text" name="name" value="NAME123">
@@ -68,14 +60,12 @@
     </form>
     <hr>
     <form action="" method="post" onsubmit="this.action='/api/school/' + this.id.value">
-        @csrf
         @method('DELETE')
         <input type="number" name="id" value="1">
         <button type="submit">/api/school/{id} DELETE</button>
     </form>
     <hr>
     <form action="/api/survey/food" method="post">
-        @csrf
         <select class="school-select" name="school" required>
             <option value="">-- Pilih Sekolah --</option>
         </select>
@@ -89,7 +79,6 @@
     </form>
     <hr>
     <form action="/api/survey/allergy" method="post">
-        @csrf
         <select class="school-select" name="school" required>
             <option value="">-- Pilih Sekolah --</option>
         </select>

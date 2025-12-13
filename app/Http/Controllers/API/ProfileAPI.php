@@ -2,35 +2,25 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
-
+use Illuminate\Http\Request;
 use App\Models\Account;
 
 class ProfileAPI extends Controller
 {
-    public function GetProfile() {
-        $userId = Session::get('user_id');
+    public function GetProfile(Request $request)
+    {
+        $user = $request->get('user');
 
-        if (!$userId) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User is not logged in or session not found'
-            ], 401);
-        }
-
-        $account = Account::with('employees')->find($userId);
-
-        if (!$account) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Account not found'
-            ], 404);
+        if ($user) {
+            $user->load('employees');
         }
 
         return response()->json([
             'status' => 'success',
-            'data' => $account
-        ], 200);
+            'data' => $user
+        ]);
     }
+
 }
+
 

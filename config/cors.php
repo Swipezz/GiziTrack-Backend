@@ -6,7 +6,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://8b471496bf14.ngrok-free.app',
+        env('FRONTEND_URL'),
     ],
 
     'allowed_headers' => [

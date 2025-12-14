@@ -20,7 +20,7 @@ class ForceCorsSingleOrigin
     $response->headers->remove('Access-Control-Allow-Origin');
     $response->headers->set(
         'Access-Control-Allow-Origin',
-        'https://efd6baf6e645.ngrok-free.app'
+        'https://8b471496bf14.ngrok-free.app'
     );
 
     return $response;

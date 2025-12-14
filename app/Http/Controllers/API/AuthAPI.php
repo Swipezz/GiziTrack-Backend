@@ -36,7 +36,7 @@ class AuthAPI extends Controller
                 60 * 24,
                 '/',
                 null,
-                true,
+                false,
                 true,
                 false,
                 'None'

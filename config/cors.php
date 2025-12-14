@@ -6,7 +6,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'https://efd6baf6e645.ngrok-free.app',
+        'https://8b471496bf14.ngrok-free.app',
     ],
 
     'allowed_headers' => [

@@ -24,6 +24,7 @@ Route::post('/api/register', [AuthAPI::class, 'RequestRegister']);
 // User memerlukan api_token untuk mengakses API dibawah
 // Protected API routes (require token authentication)
 Route::middleware(['api.token'])->group(function () {
+
     // User hanya perlu melakukan request dan session api_token akan dihapus 
     Route::post('/api/logout', [AuthAPI::class, 'RequestLogout']);
 
@@ -41,6 +42,7 @@ Route::middleware(['api.token'])->group(function () {
     // }
     Route::get('/api/profile', [ProfileAPI::class, 'GetProfile']);
 
+    // Memberikan tabel list sekolah
     //     {
     //     "id": 3,
     //     "logo": "lorem",
@@ -76,6 +78,7 @@ Route::middleware(['api.token'])->group(function () {
 
     // User memilih sekolah yang disediakan dan memberikan data food, total(int)
     Route::post('/api/survey/food', [SurveyAPI::class, 'SurveyFood']);
+
     // Sama seperti diatas, tapi tidak menggunakan param total
     Route::post('/api/survey/allergy', [SurveyAPI::class, 'SurveyAllergy']);
 });
